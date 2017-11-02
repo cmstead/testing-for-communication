@@ -23,12 +23,12 @@
 	</script>
 
 	<style>
-	pre {
-		border: 0;
-		margin:0;
-		padding: 0;
-		box-shadow: none !important;
-	}
+		pre {
+			border: 0;
+			margin: 0;
+			padding: 0;
+			box-shadow: none !important;
+		}
 	</style>
 </head>
 
@@ -46,7 +46,7 @@
 			</section>
 
 			<section>
-				<h3>Stuff I Do</h3>
+				<h2>Stuff I Do</h2>
 
 				<ul>
 					<li class="fragment">TDD</li>
@@ -63,7 +63,7 @@
 			</section>
 
 			<section>
-				<h3>Why Do We Say We Test?</h3>
+				<h2>Why Do We Say We Test?</h2>
 				<ul class="fragment">
 					<li>To verify correct behavior</li>
 					<li>To capture information about bugs</li>
@@ -73,16 +73,17 @@
 			</section>
 
 			<section>
-				<h3>Tests Get No Respect</h3>
+				<h2>Tests Get No Respect</h2>
 				<img src="./images/rodney-dangerfield.jpg">
 			</section>
 
 			<section>
+				<h2>Let's Test Some Code!</h2>
 				<pre>
 					<code data-trim data-noescape>
-						it('should not blow up when I do the thing.', function () {
+						it('should return widgets', function () {
 							var result = widgetFactory
-								.buildWithParams("WidgeCo", {
+								.buildWidgets("WidgeCo", {
 									id: 1234,
 									widgetMeta: {
 										gearTeethCount: 91,
@@ -98,7 +99,34 @@
 			</section>
 
 			<section>
+				<h2>We Exercised The Code, But...</h2>
+
+				<ul>
+					<li>Description text should declare intent</li>
+					<li>Named variables expose meaning better</li>
+					<li>Complex objects can be extracted away</li>
+					<li>Assertions should ensure full proper behavior</li>
+				</ul>
+			</section>
+
+			<section>
 				<img src="./images/Lord-Beer-me-strength.jpg">
+			</section>
+
+			<section>
+				<h2>Tests That Communicate</h2>
+
+				<ul>
+					<li class="fragment">Inform developers of intent</li>
+					<li class="fragment">Exemplify API use</li>
+					<li class="fragment">Deepen understanding of code contracts</li>
+					<li class="fragment">Expose criteria for correct behavior</li>
+				</ul>
+			</section>
+
+			<section>
+				<h2>Writing Great Code Is Like Writing A Great Story</h2>
+				<h3 class="fragment">It Never Happens In A Single Pass</h3>
 			</section>
 
 		</div>
