@@ -82,9 +82,8 @@
 				<pre>
 					<code data-trim data-noescape>
 						it('should return widgets', function () {
-							var result = widgetFactory
+							const result = widgetFactory
 								.buildWidgets("WidgeCo", {
-									id: 1234,
 									widgetMeta: {
 										gearTeethCount: 91,
 										handles: 3
@@ -92,7 +91,7 @@
 									presets: ['foo', 5, 12.3]
 								}, 17);
 
-							assert.equal(typeof result, object);
+							assert.equal(typeof result, object, 'Oh noes!');
 						});
 					</code>
 				</pre>
@@ -110,7 +109,7 @@
 			</section>
 
 			<section>
-				<img src="./images/Lord-Beer-me-strength.jpg">
+				<img src="./images/so-close.jpg">
 			</section>
 
 			<section>
@@ -127,6 +126,112 @@
 			<section>
 				<h2>Writing Great Code Is Like Writing A Great Story</h2>
 				<h3 class="fragment">It Never Happens In A Single Pass</h3>
+			</section>
+
+			<section>
+				<h2>Where Do We Start?</h2>
+				<p>Sometimes choosing the right place to start is the hardest thing you'll do all day</p>
+			</section>
+
+			<section>
+				<h2>Here's What I'd Do</h2>
+
+				<ol>
+					<li class="fragment">Extract variables</li>
+					<li class="fragment">Define and test with output type</li>
+					<li class="fragment">Build factory for setup data</li>
+					<li class="fragment">Update description</li>
+					<li class="fragment">Introduce golden master test for completeness</li>
+				</ol>
+			</section>
+
+			<section>
+				<h2>Why Go That Way?</h2>
+
+				<ol>
+					<li class="fragment">Extracting variables is fast and easy</li>
+					<li class="fragment">Types are declarative and easy to create and test with Signet</li>
+					<li class="fragment">Factories are a little heavier, but quick with extracted data and DataMother</li>
+					<li class="fragment">Test descriptions are easiest to write from declarative code</li>
+					<li class="fragment">Golden master tests are accurate and complete, but longer to set up</li>
+				</ol>
+			</section>
+
+			<section>
+				<h2>Extract Variable</h2>
+				<h3>Part of This Healthy Refactoring</h3>
+				<h4>(P.S. You probably have a tool that will do this for you!)</h4>
+			</section>
+
+			<section>
+				<pre>
+					<code data-trim data-noescape>
+						it('should return widgets', function () {
+							const companyName = "WidgeCo";
+							const widgetCount = 17;
+							const widgetSpecs = {
+								widgetMeta: {
+									gearTeethCount: 91,
+									handles: 3
+								},
+								presets: ['foo', 5, 12.3]
+							}
+
+							const widgets = widgetFactory
+								.buildWidgets(companyName, widgetSpecs, widgetCount);
+
+							assert.equal(typeof widgets, object, 'Oh noes!');
+						});
+					</code>
+				</pre>
+			</section>
+
+			<section>
+				<h2>Happy Variable Names, Everywhere!</h2>
+				<img src="./images/wilt-snuggle-bear-full.jpg">
+			</section>
+
+			<section>
+				<h2>Domain Modeling For The Fearless</h2>
+				<h3>Signet Types Allow for Rich Verification</h3>
+			</section>
+
+			<section>
+				<h2>Let's Model a Widget</h2>
+				<pre>
+					<code data-trim data-noescape>
+						signet.defineDuckType('widget', {
+							companyName: 'string',
+							handles: 'array&lt;string&gt;',
+							teethCount: 'int',
+							startupDisplay: 'string',
+							logMaxLength: 'int',
+							humFrequencyTolerance: 'number'
+						});
+					</code>
+				</pre>
+			</section>
+
+			<section>
+				<h2>Then Our Test Becomes...</h2>
+				<pre>
+					<code data-trim data-noescape>
+						it('should return widgets', function () {
+							const isWidgetArray = signet.isTypeOf('array&lt;widget&gt;');
+
+							const companyName = "WidgeCo";
+							const widgetCount = 17;
+							const widgetSpecs = {
+								...
+							}
+							
+							const widgets = widgetFactory
+								.buildWidgets(companyName, widgetSpecs, widgetCount);
+							
+							assert(isWidgetArray(widgets), 'We didn\'t get a widget array!');
+						});
+					</code>
+				</pre>
 			</section>
 
 		</div>
