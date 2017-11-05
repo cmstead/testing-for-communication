@@ -43,6 +43,7 @@
 			<section>
 				<h2>I'm Chris</h2>
 				<h3>@cm_stead</h3>
+				<h3>www.chrisstead.com</h3>
 			</section>
 
 			<section>
@@ -69,6 +70,16 @@
 					<li>To capture information about bugs</li>
 					<li>To meet code coverage</li>
 					<li>We were told to</li>
+				</ul>
+			</section>
+
+			<section>
+				<h2>Better Reasons To Test</h2>
+
+				<ul>
+					<li class="fragment">Communication</li>
+					<li class="fragment">Communication</li>
+					<li class="fragment">Communication</li>
 				</ul>
 			</section>
 
@@ -116,7 +127,7 @@
 				<h2>Tests That Communicate</h2>
 
 				<ul>
-					<li class="fragment">Inform developers of intent</li>
+					<li class="fragment">Inform other developers of original intent</li>
 					<li class="fragment">Exemplify API use</li>
 					<li class="fragment">Deepen understanding of code contracts</li>
 					<li class="fragment">Expose criteria for correct behavior</li>
@@ -150,10 +161,10 @@
 
 				<ol>
 					<li class="fragment">Extracting variables is fast and easy</li>
-					<li class="fragment">Types are declarative and easy to create and test with Signet</li>
-					<li class="fragment">Factories are a little heavier, but quick with extracted data and DataMother</li>
-					<li class="fragment">Test descriptions are easiest to write from declarative code</li>
-					<li class="fragment">Golden master tests are accurate and complete, but longer to set up</li>
+					<li class="fragment">Good types are descriptive</li>
+					<li class="fragment">Data factories remove noise</li>
+					<li class="fragment">Declarative code leads us to better descriptions</li>
+					<li class="fragment">Golden master tests are great, but harder to set up</li>
 				</ol>
 			</section>
 
@@ -169,7 +180,7 @@
 						it('should return widgets', function () {
 							const companyName = "WidgeCo";
 							const widgetCount = 17;
-							const widgetSpecs = {
+							const widgetSpec = {
 								widgetMeta: {
 									gearTeethCount: 91,
 									handles: 3
@@ -178,7 +189,7 @@
 							}
 
 							const widgets = widgetFactory
-								.buildWidgets(companyName, widgetSpecs, widgetCount);
+								.buildWidgets(companyName, widgetSpec, widgetCount);
 
 							assert.equal(typeof widgets, object, 'Oh noes!');
 						});
@@ -200,6 +211,8 @@
 				<h2>Let's Model a Widget</h2>
 				<pre>
 					<code data-trim data-noescape>
+						const signet = require('signet')();
+
 						signet.defineDuckType('widget', {
 							companyName: 'string',
 							handles: 'array&lt;string&gt;',
@@ -208,6 +221,21 @@
 							logMaxLength: 'int',
 							humFrequencyTolerance: 'number'
 						});
+
+						module.exports = signet;
+					</code>
+				</pre>
+			</section>
+
+			<section>
+				<h2>... And Build a Utility Function</h2>
+
+				<pre>
+					<code data-trim data-noescape>
+						function assertByType(type, value, errorMessage) {
+							const isCorrectType = signet.isTypeOf(type);
+							assert(isCorrectType(value), errorMessage);
+						}
 					</code>
 				</pre>
 			</section>
@@ -217,21 +245,176 @@
 				<pre>
 					<code data-trim data-noescape>
 						it('should return widgets', function () {
-							const isWidgetArray = signet.isTypeOf('array&lt;widget&gt;');
-
 							const companyName = "WidgeCo";
 							const widgetCount = 17;
-							const widgetSpecs = {
-								...
+							const widgetSpec = {
+								// Truncated for brevity
 							}
 							
 							const widgets = widgetFactory
-								.buildWidgets(companyName, widgetSpecs, widgetCount);
+								.buildWidgets(companyName, widgetSpec, widgetCount);
 							
-							assert(isWidgetArray(widgets), 'We didn\'t get a widget array!');
+							assertByType('array&lt;widget&gt;', widgets, 'We didn\'t get a widget array!');
 						});
 					</code>
 				</pre>
+			</section>
+
+			<section>
+				<img src="./images/that-was-easy.jpg">
+			</section>
+
+			<section>
+				<h2>Factories For Fun and Profit</h2>
+				<h3>Declarative Test Data with DataMother</h3>
+			</section>
+
+			<section>
+				<h2>Moving Our Spec to DataMother</h2>
+				<pre>
+					<code data-trim data-noescape>
+						function widgetSpecFactory () {
+							return {
+								widgetMeta: {
+									gearTeethCount: 91,
+									handles: 3
+								},
+								presets: ['foo', 5, 12.3]
+							};
+						}
+
+						dataMother.register('widgetSpec', widgetSpecFactory);
+					</code>
+				</pre>
+			</section>
+
+			<section>
+				<h2>Then, Simply Declare What We Need</h2>
+
+				<pre>
+					<code data-trim data-noescape>
+						it('should return widgets', function () {
+							const companyName = "WidgeCo";
+							const widgetCount = 17;
+							const widgetSpec = dataMother.buildData('widgetSpec');
+							
+							const widgets = widgetFactory
+								.buildWidgets(companyName, widgetSpec, widgetCount);
+							
+							assertByType('array&lt;widget&gt;', widgets, 'We didn\'t get a widget array!');
+						});
+					</code>
+				</pre>
+			</section>
+
+			<section>
+				<h2>Clarity...</h2>
+				<img src="./images/clarity.jpg">
+			</section>
+
+			<section>
+				<h2>A Well-Described Test</h2>
+				<h3>Choice Words Make All The Difference</h3>
+			</section>
+
+			<section>
+				<h2>Words and Code Together In Harmony</h2>
+				<pre>
+					<code data-trim data-noescape>
+						it('should build a widget array using a company, widget spec and count', function () {
+							const companyName = "WidgeCo";
+							const widgetCount = 17;
+							const widgetSpec = dataMother.buildData('widgetSpec');
+							
+							const widgets = widgetFactory
+								.buildWidgets(companyName, widgetSpec, widgetCount);
+							
+							assertByType('array&lt;widget&gt;', widgets, 'We didn\'t get a widget array!');
+						});
+					</code>
+				</pre>
+			</section>
+
+			<section>
+				<img src="./images/hippies.jpg">
+			</section>
+
+			<section>
+				<h2>Bonus Round: Verifying Data For Great Justice</h2>
+				<h3>Using Approvals To Ensure Data Correctness</h3>
+			</section>
+
+			<section>
+				<h2>The Setup</h2>
+				<pre>
+					<code data-trim data-noescape>
+						const approvalsLocation = './test/approvals';
+						const approvalsConfigFactory = require('approvals-config-factory');
+						const approvalsConfig = approvalsConfigFactory.buildApprovalsConfig({ 
+							reporter: 'kdiff3'
+						});
+						
+						module.exports = require('approvals')
+							.configure(approvalsConfig)
+							.mocha(approvalsLocation);
+					</code>
+				</pre>
+			</section>
+
+			<section>
+				<h2>The Verification</h2>
+				<pre>
+					<code data-trim data-noescape>
+						it('should build a widget array using a company, widget spec and count', function () {
+							const companyName = "WidgeCo";
+							const widgetCount = 17;
+							const widgetSpec = dataMother.buildData('widgetSpec');
+							
+							const widgets = widgetFactory
+								.buildWidgets(companyName, widgetSpec, widgetCount);
+							
+							assertByType('array&lt;widget&gt;', widgets, 'We didn\'t get a widget array!');
+
+							this.verifyAsJSON(widgets);
+						});
+					</code>
+				</pre>
+			</section>
+
+			<section>
+				<h2>Enlightenment</h2>
+
+				<img src="./images/enlightenment.jpg">
+			</section>
+
+			<section>
+				<h2>The Takeaway</h2>
+
+				<ul>
+					<li class="fragment">Tests should do more than exercise code</li>
+					<li class="fragment">All good tests should facilitate communication</li>
+					<li class="fragment">Documentation + tests is doubling your effort</li>
+					<li class="fragment">The right tools can ease testing turmoil</li>
+				</ul>
+			</section>
+
+			<section>
+				<h2>Libraries I Used</h2>
+
+				<ul>
+					<li>Mocha (<a href="npmjs.com/package/mocha">https://www.npmjs.com/package/mocha</a>)</li>
+					<li>Chai (<a href="npmjs.com/package/chai">https://www.npmjs.com/package/chai</a>)</li>
+					<li>Signet (<a href="npmjs.com/package/signet">https://www.npmjs.com/package/signet</a>)</li>
+					<li>DataMother (<a href="npmjs.com/package/datamother">https://www.npmjs.com/package/datamother</a>)</li>
+					<li>Approvals.js (<a href="npmjs.com/package/approvals">https://www.npmjs.com/package/approvals</a>)</li>
+					<li>Approvals Config Factory (<a href="npmjs.com/package/approvals-config-factory">https://www.npmjs.com/package/approvals-config-factory</a>)</li>
+				</ul>
+			</section>
+
+			<section>
+				<h2>Thank you!</h2>
+
+				<p>http://www.chrisstead.com/presentations/testing-for-communication</p>
 			</section>
 
 		</div>
@@ -246,6 +429,7 @@
 		// - https://github.com/hakimel/reveal.js#dependencies
 		Reveal.initialize({
 			controls: false,
+			history: true,
 			transition: 'fade',
 			dependencies: [
 				{ src: 'plugin/markdown/marked.js' },
