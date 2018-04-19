@@ -54,26 +54,45 @@
 					<li class="fragment">I communicate with code</li>
 					<li class="fragment">I make tools:
 						<ul>
-							<li>JS Refactorings</li>
+							<li>JS Refactor</li>
 							<li>Dject</li>
 							<li>Mochadoc</li>
 							<li>Signet</li>
 							<li>Stubcontractor</li>
+							<li>And more...</li>
 						</ul>
 					</li>
 				</ul>
 			</section>
 
 			<section>
-				<h2>A Fake Widget Company</h2>
-
-				<p>We run Creative Widget Company and we prototype widgets... creatively?</p>
+				<h2>Legacy Code ...</h2>
+				<p>... is any code without tests.</p>
+				<p>&mdash; Michael Feathers</p>
 			</section>
 
 			<section>
-				<h2>We Have Legacy Code.</h2>
+				<h3>WidgeTest9000 is Legacy Code:</h3>
+				<img src="./images/widge-test-9000-screenshot.png" alt="widgeTest9000 source code">
+			</section>
 
-				<p>Code will go here</p>
+			<section>
+				<h2>Let's write a test!</h2>
+			</section>
+
+			<section>
+				<h3>The Setup:</h3>
+				<video src="./video/01-set-up-beforeach.mp4" controls="controls"></video>
+			</section>
+
+			<section>
+				<h3>The Arrangement and Action:</h3>
+				<video src="./video/02-test-arrangement.mp4" controls="controls"></video>
+			</section>
+
+			<section>
+				<h3>The Assertion:</h3>
+				<video src="./video/03-test-approve.mp4" controls="controls"></video>
 			</section>
 
 			<section>
@@ -89,26 +108,6 @@
 			<section>
 				<h2>Tests Get No Respect</h2>
 				<img src="./images/rodney-dangerfield.jpg">
-			</section>
-
-			<section>
-				<h2>Let's Test Some Code!</h2>
-				<pre>
-					<code data-trim data-noescape>
-						it('should return widgets', function () {
-							const result = widgetFactory
-								.buildWidgets("WidgeCo", {
-									widgetMeta: {
-										gearTeethCount: 91,
-										handles: 3
-									},
-									presets: ['foo', 5, 12.3]
-								}, 17);
-
-							assert.equal(typeof result, object, 'Oh noes!');
-						});
-					</code>
-				</pre>
 			</section>
 
 			<section>
@@ -128,7 +127,6 @@
 					<li>Description text should declare intent</li>
 					<li>Named variables expose meaning better</li>
 					<li>Complex objects can be extracted away</li>
-					<li>Assertions should ensure full proper behavior</li>
 				</ul>
 			</section>
 
