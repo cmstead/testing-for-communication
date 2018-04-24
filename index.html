@@ -140,7 +140,7 @@
 				<ul>
 					<li class="fragment">Inform other developers of original intent</li>
 					<li class="fragment">Exemplify API use</li>
-					<li class="fragment">Deepen understanding of code contracts</li>
+					<li class="fragment">Deepen understanding of the business domain</li>
 					<li class="fragment">Expose criteria for correct behavior</li>
 				</ul>
 			</section>
@@ -159,11 +159,9 @@
 				<h2>Here's What I'd Do</h2>
 
 				<ol>
-					<li class="fragment">Extract variables</li>
-					<li class="fragment">Define and test with output type</li>
-					<li class="fragment">Build factory for setup data</li>
 					<li class="fragment">Update description</li>
-					<li class="fragment">Introduce golden master test for completeness</li>
+					<li class="fragment">Extract variables</li>
+					<li class="fragment">Build factory for setup data</li>
 				</ol>
 			</section>
 
@@ -171,108 +169,63 @@
 				<h2>Why Go That Way?</h2>
 
 				<ol>
-					<li class="fragment">Extracting variables is fast and easy</li>
-					<li class="fragment">Good types are descriptive</li>
-					<li class="fragment">Data factories remove noise</li>
 					<li class="fragment">Declarative code leads us to better descriptions</li>
-					<li class="fragment">Golden master tests are great, but harder to set up</li>
+					<li class="fragment">Extracting variables is fast and easy</li>
+					<li class="fragment">Data factories remove noise</li>
 				</ol>
+			</section>
+
+			<section>
+				<h2>But First...</h2>
+			</section>
+
+			<section>
+				<h2>Step 0 - Model Your Domain</h2>
+				<h3>Use types as a domain specific language for your expectations</h3>
+			</section>
+
+			<section>
+				<h3>Off-The-Shelf to Bespoke Domain Types</h3>
+				<video src="./video/10-domain-language-as-types.mp4"></video>
+			</section>
+
+			<section>
+				<h2>A Well-Described Test</h2>
+				<h3>Choice Words Make All The Difference</h3>
+			</section>
+
+			<section>
+				<h3>Choosing a test name</h3>
+
+			</section>
+
+			<section>
+				<h2>Words and Code Together In Harmony</h2>
+				<video src="./video/04-test-rename.mp4"></video>
+			</section>
+
+			<section>
+				<img src="./images/hippies.jpg">
 			</section>
 
 			<section>
 				<h2>Extract Variable</h2>
 				<h3>Part of This Healthy Refactoring</h3>
-				<h4>(P.S. You probably have a tool that will do this for you!)</h4>
 			</section>
 
 			<section>
-				<pre>
-					<code data-trim data-noescape>
-						it('should return widgets', function () {
-							const companyName = "WidgeCo";
-							const widgetCount = 17;
-							const widgetSpec = {
-								widgetMeta: {
-									gearTeethCount: 91,
-									handles: 3
-								},
-								presets: ['foo', 5, 12.3]
-							}
+				<h3>Automate Your Refactorings</h3>
 
-							const widgets = widgetFactory
-								.buildWidgets(companyName, widgetSpec, widgetCount);
+			</section>
 
-							assert.equal(typeof widgets, object, 'Oh noes!');
-						});
-					</code>
-				</pre>
+			<section>
+				<h3>Let's Extract!</h3>
+				<video src="./video/05-extract-variables.mp4"></video>
 			</section>
 
 			<section>
 				<h2>Happy Variable Names, Everywhere!</h2>
 				<img src="./images/wilt-snuggle-bear-full.jpg">
-			</section>
-
-			<section>
-				<h2>Domain Modeling For The Fearless</h2>
-				<h3>Signet Types Allow for Rich Verification</h3>
-			</section>
-
-			<section>
-				<h2>Let's Model a Widget</h2>
-				<pre>
-					<code data-trim data-noescape>
-						const signet = require('signet')();
-
-						signet.defineDuckType('widget', {
-							companyName: 'string',
-							handles: 'array&lt;string&gt;',
-							teethCount: 'int',
-							startupDisplay: 'string',
-							logMaxLength: 'int',
-							humFrequencyTolerance: 'number'
-						});
-
-						module.exports = signet;
-					</code>
-				</pre>
-			</section>
-
-			<section>
-				<h2>... And Build a Utility Function</h2>
-
-				<pre>
-					<code data-trim data-noescape>
-						function assertByType(type, value, errorMessage) {
-							const isCorrectType = signet.isTypeOf(type);
-							assert(isCorrectType(value), errorMessage);
-						}
-					</code>
-				</pre>
-			</section>
-
-			<section>
-				<h2>Then Our Test Becomes...</h2>
-				<pre>
-					<code data-trim data-noescape>
-						it('should return widgets', function () {
-							const companyName = "WidgeCo";
-							const widgetCount = 17;
-							const widgetSpec = {
-								// Truncated for brevity
-							}
-							
-							const widgets = widgetFactory
-								.buildWidgets(companyName, widgetSpec, widgetCount);
-							
-							assertByType('array&lt;widget&gt;', widgets, 'We didn\'t get a widget array!');
-						});
-					</code>
-				</pre>
-			</section>
-
-			<section>
-				<img src="./images/that-was-easy.jpg">
 			</section>
 
 			<section>
@@ -282,120 +235,12 @@
 
 			<section>
 				<h2>Moving Our Spec to DataMother</h2>
-				<pre>
-					<code data-trim data-noescape>
-						function widgetSpecFactory () {
-							return {
-								widgetMeta: {
-									gearTeethCount: 91,
-									handles: 3
-								},
-								presets: ['foo', 5, 12.3]
-							};
-						}
-
-						dataMother.register('widgetSpec', widgetSpecFactory);
-					</code>
-				</pre>
-			</section>
-
-			<section>
-				<h2>Then, Simply Declare What We Need</h2>
-
-				<pre>
-					<code data-trim data-noescape>
-						it('should return widgets', function () {
-							const companyName = "WidgeCo";
-							const widgetCount = 17;
-							const widgetSpec = dataMother.buildData('widgetSpec');
-							
-							const widgets = widgetFactory
-								.buildWidgets(companyName, widgetSpec, widgetCount);
-							
-							assertByType('array&lt;widget&gt;', widgets, 'We didn\'t get a widget array!');
-						});
-					</code>
-				</pre>
+				<video src="./video/06-extract-data-to-datamother.mp4"></video>
 			</section>
 
 			<section>
 				<h2>Clarity...</h2>
 				<img src="./images/clarity.jpg">
-			</section>
-
-			<section>
-				<h2>A Well-Described Test</h2>
-				<h3>Choice Words Make All The Difference</h3>
-			</section>
-
-			<section>
-				<h2>Words and Code Together In Harmony</h2>
-				<pre>
-					<code data-trim data-noescape>
-						it('should build a widget array using a company, widget spec and count', function () {
-							const companyName = "WidgeCo";
-							const widgetCount = 17;
-							const widgetSpec = dataMother.buildData('widgetSpec');
-							
-							const widgets = widgetFactory
-								.buildWidgets(companyName, widgetSpec, widgetCount);
-							
-							assertByType('array&lt;widget&gt;', widgets, 'We didn\'t get a widget array!');
-						});
-					</code>
-				</pre>
-			</section>
-
-			<section>
-				<img src="./images/hippies.jpg">
-			</section>
-
-			<section>
-				<h2>Bonus Round: Verifying Data For Great Justice</h2>
-				<h3>Using Approvals To Ensure Data Correctness</h3>
-			</section>
-
-			<section>
-				<h2>The Setup</h2>
-				<pre>
-					<code data-trim data-noescape>
-						const approvalsLocation = './test/approvals';
-						const approvalsConfigFactory = require('approvals-config-factory');
-						const approvalsConfig = approvalsConfigFactory.buildApprovalsConfig({ 
-							reporter: 'kdiff3'
-						});
-						
-						module.exports = require('approvals')
-							.configure(approvalsConfig)
-							.mocha(approvalsLocation);
-					</code>
-				</pre>
-			</section>
-
-			<section>
-				<h2>The Verification</h2>
-				<pre>
-					<code data-trim data-noescape>
-						it('should build a widget array using a company, widget spec and count', function () {
-							const companyName = "WidgeCo";
-							const widgetCount = 17;
-							const widgetSpec = dataMother.buildData('widgetSpec');
-							
-							const widgets = widgetFactory
-								.buildWidgets(companyName, widgetSpec, widgetCount);
-							
-							assertByType('array&lt;widget&gt;', widgets, 'We didn\'t get a widget array!');
-
-							this.verifyAsJSON(widgets);
-						});
-					</code>
-				</pre>
-			</section>
-
-			<section>
-				<h2>Enlightenment</h2>
-
-				<img src="./images/enlightenment.jpg">
 			</section>
 
 			<section>
